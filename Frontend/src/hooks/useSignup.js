@@ -5,6 +5,7 @@ import { useAuthContext } from "../context/AuthContext";
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
+
   const signup = async ({
     fullName,
     username,
@@ -20,6 +21,7 @@ const useSignup = () => {
       gender,
     });
     if (!success) return;
+
     setLoading(true);
     try {
       const res = await fetch("/api/auth/signup", {
@@ -33,6 +35,7 @@ const useSignup = () => {
           gender,
         }),
       });
+
       const data = await res.json();
       if (data.error) {
         throw new Error(data.error);
@@ -45,9 +48,9 @@ const useSignup = () => {
       setLoading(false);
     }
   };
+
   return { loading, signup };
 };
-
 export default useSignup;
 
 function handleInputErrors({
@@ -58,16 +61,19 @@ function handleInputErrors({
   gender,
 }) {
   if (!fullName || !username || !password || !confirmPassword || !gender) {
-    toast.error("Please Fill In All The Fields");
+    toast.error("Please fill in all fields");
     return false;
   }
+
   if (password !== confirmPassword) {
-    toast.error("Passwords Do Not Match");
+    toast.error("Passwords do not match");
     return false;
   }
+
   if (password.length < 6) {
-    toast.error("Password Must Be At Least 6 Characters Long");
+    toast.error("Password must be at least 6 characters");
     return false;
   }
+
   return true;
 }
